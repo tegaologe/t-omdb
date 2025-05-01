@@ -4,11 +4,12 @@ import './exceptions.dart';
 import 'package:http/http.dart' as http;
 
 enum OmdbResponseType { json, xml }
+
 enum OmdbType { movie, series, episode }
+
 enum OmdbPlot { short, full }
 
 class OmdbApi {
-
   // Define the scheme, host and apiKey for the API to be used in the Uri
   final String scheme = 'https';
   final String host = 'omdbapi.com';
@@ -30,19 +31,25 @@ class OmdbApi {
     String? year,
     OmdbPlot? plot,
     OmdbResponseType? responseType,
+    bool? tomatoes,
   }) async {
+    final Map<String, dynamic> queryParameters = Map.fromEntries(
+      [
+        MapEntry('i', id),
+        MapEntry('apikey', apiKey),
+        MapEntry('type', type?.name),
+        MapEntry('y', year),
+        MapEntry('plot', plot?.name),
+        MapEntry('r', responseType?.name),
+        MapEntry('tomatoes', tomatoes?.toString()),
+      ].where((element) => element.value != null),
+    );
 
-    final Map<String, dynamic> queryParameters = Map.fromEntries([
-      MapEntry('i', id),
-      MapEntry('apikey', apiKey),
-      MapEntry('type', type?.name),
-      MapEntry('y', year),
-      MapEntry('plot', plot?.name),
-      MapEntry('r', responseType?.name),
-    ].where((element) => element.value != null));
-
-    final uri =
-        Uri(scheme: scheme, host: host, queryParameters: queryParameters);
+    final uri = Uri(
+      scheme: scheme,
+      host: host,
+      queryParameters: queryParameters,
+    );
 
     final response = handleOmdbHttpStatuses(await http.get(uri));
 
@@ -66,18 +73,22 @@ class OmdbApi {
     OmdbPlot? plot,
     OmdbResponseType? responseType,
   }) async {
+    final Map<String, dynamic> queryParameters = Map.fromEntries(
+      [
+        MapEntry('t', title),
+        MapEntry('apikey', apiKey),
+        MapEntry('type', type?.name),
+        MapEntry('y', year),
+        MapEntry('plot', plot?.name),
+        MapEntry('r', responseType?.name),
+      ].where((element) => element.value != null),
+    );
 
-    final Map<String, dynamic> queryParameters = Map.fromEntries([
-      MapEntry('t', title),
-      MapEntry('apikey', apiKey),
-      MapEntry('type', type?.name),
-      MapEntry('y', year),
-      MapEntry('plot', plot?.name),
-      MapEntry('r', responseType?.name),
-    ].where((element) => element.value != null));
-
-    final uri =
-        Uri(scheme: scheme, host: host, queryParameters: queryParameters);
+    final uri = Uri(
+      scheme: scheme,
+      host: host,
+      queryParameters: queryParameters,
+    );
 
     final response = handleOmdbHttpStatuses(await http.get(uri));
 
@@ -99,18 +110,22 @@ class OmdbApi {
     OmdbResponseType? responseType,
     String? page,
   }) async {
+    final Map<String, dynamic> queryParameters = Map.fromEntries(
+      [
+        MapEntry('s', query),
+        MapEntry('apikey', apiKey),
+        MapEntry('type', type?.name),
+        MapEntry('y', year),
+        MapEntry('r', responseType?.name),
+        MapEntry('page', page),
+      ].where((element) => element.value != null),
+    );
 
-    final Map<String, dynamic> queryParameters = Map.fromEntries([
-      MapEntry('s', query),
-      MapEntry('apikey', apiKey),
-      MapEntry('type', type?.name),
-      MapEntry('y', year),
-      MapEntry('r', responseType?.name),
-      MapEntry('page', page),
-    ].where((element) => element.value != null));
-
-    final uri =
-    Uri(scheme: scheme, host: host, queryParameters: queryParameters);
+    final uri = Uri(
+      scheme: scheme,
+      host: host,
+      queryParameters: queryParameters,
+    );
 
     final response = handleOmdbHttpStatuses(await http.get(uri));
 
